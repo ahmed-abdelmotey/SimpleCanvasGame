@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Canvas Element</title>
+	<script src="jquery-3.1.1.js"></script>
+</head>
+<body>
+<canvas id="myCanvas" width="1200" height="600" style="width : 1200px;height : 600px;  border:1px solid black;"></canvas>
+<script type="text/javascript">
+	
+	// declare variables
+	var can = document.getElementById("myCanvas");
+	var ctx = can.getContext("2d");
+	var rad = 50;
+	var maxTop = parseInt(can.style.height) - rad;
+	var maxLeft = parseInt(can.style.width) - rad;
+	var x = rad;
+	var y = rad;
+	var step = 10;
+	var state = 0;
+
+	//draw circle
+    function drawCircle(cx,cy,r,strtAng,endAng) {	
+    	var x = cx;
+    	var y = cy;
+    	var radius = r;
+    	var startAngle = Math.PI*(strtAng/180);
+    	var endAngle = Math.PI*(endAng/180);
+    	var antiClockwise = false;
+    	ctx.beginPath();
+    	ctx.arc(x, y, radius, startAngle, endAngle, antiClockwise);
+    	ctx.lineTo(x, y);
+    	ctx.closePath();	
+    	ctx.fillStyle = "#" + Math.floor(Math.random()*16777215).toString(16);	
+    	ctx.fill();  
+    }
+    // initialize position
+    drawCircle(x,y,rad,0,360);
+    // get user input and draw
+	document.onkeydown = function (f) {
+		//set new position and state
+		if (f.key == 'ArrowRight' || f.key == 'ArrowLeft' || f.key == 'ArrowDown' || f.key == 'ArrowUp')
+		{
+			if (f.key == 'ArrowRight' && x < maxLeft) 
+				{x += step; strtang = 45; endang = 315;};
+			if (f.key == 'ArrowLeft' && x > rad) 
+				{x -= step; strtang = 225; endang = 135;};
+			if(f.key == 'ArrowDown' && y < maxTop)
+				{y += step; strtang = 135; endang = 45;};
+			if(f.key == 'ArrowUp' && y > rad)
+				{y -= step; strtang = 315; endang = 225;};
+			//draw actions
+			ctx.clearRect(0, 0, 1200, 600);
+			if(state == 0){
+				drawCircle(x,y,rad,0,360);
+				state =1;
+			}
+			else{
+				drawCircle(x,y,rad,strtang,endang);
+				state = 0;
+			}
+		}
+	}
+</script>
+</body>
+</html>
